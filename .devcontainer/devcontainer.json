@@ -1,0 +1,16 @@
+{
+    "name": "Angular, .NET 6, Grafana, and Prometheus",
+    "dockerComposeFile": "docker-compose.yml",
+    "service": "app",
+    "workspaceFolder": "/workspace",
+    "settings": {
+      "terminal.integrated.defaultProfile.linux": "/bin/bash"
+    },
+    "extensions": [
+      "ms-dotnettools.csharp",
+      "angular.ng-template",
+      "grafana.grafana"
+    ],
+    "postCreateCommand": "npm install -g @grafana/toolkit"
+  }
+  

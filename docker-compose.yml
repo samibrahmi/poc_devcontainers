@@ -1,0 +1,49 @@
+version: '3.8'
+services:
+  app:
+    build: .
+    volumes:
+      - ..:/workspace:cached
+    command: sleep infinity
+
+  grafana:
+    image: grafana/grafana:latest
+    ports:
+      - "3000:3000"
+    environment:
+      - GF_SECURITY_ADMIN_USER=admin
+      - GF_SECURITY_ADMIN_PASSWORD=admin
+    networks:
+      - app-network
+
+  backend:
+    image: mcr.microsoft.com/dotnet/sdk:6.0
+    volumes:
+      - ./backend:/app
+    working_dir: /app
+    command: dotnet watch run
+    networks:
+      - app-network
+
+  frontend:
+    image: node:14
+    volumes:
+      - ./frontend:/app
+    working_dir: /app
+    command: npm start
+    networks:
+      - app-network
+
+  prometheus:
+    image: prom/prometheus:latest
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./prometheus:/etc/prometheus
+    command: --config.file=/etc/prometheus/prometheus.yml
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge
